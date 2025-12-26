@@ -33,10 +33,12 @@ public class javabird extends JPanel implements ActionListener {
     
     private float upper_pipe_y; // Initial random height for first pipe
     
-    private Random random = new Random();
+    private Random random;
     private Timer timer;
     
     public javabird() {
+        random = new Random();
+        
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.CYAN);
         
@@ -46,7 +48,6 @@ public class javabird extends JPanel implements ActionListener {
         // Set up keyboard input
         setFocusable(true);
         addKeyListener(new KeyAdapter() {
-            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE || 
                     e.getKeyCode() == KeyEvent.VK_UP) {
@@ -57,7 +58,6 @@ public class javabird extends JPanel implements ActionListener {
         
         // Set up mouse click for jumping
         addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseClicked(MouseEvent e) {
                 jump();
             }
@@ -156,7 +156,6 @@ public class javabird extends JPanel implements ActionListener {
         check_pipe_collision();
     }
     
-    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -181,25 +180,26 @@ public class javabird extends JPanel implements ActionListener {
         }
     }
     
-    @Override
     public void actionPerformed(ActionEvent e) {
         update_game();
         repaint();
     }
     
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Flappy Bird");
-            javabird game = new javabird();
-            frame.add(game);
-            frame.pack();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLocationRelativeTo(null);
-            frame.setResizable(false);
-            frame.setVisible(true);
-            
-            // Request focus for keyboard input
-            game.requestFocusInWindow();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame frame = new JFrame("Flappy Bird");
+                javabird game = new javabird();
+                frame.add(game);
+                frame.pack();
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setLocationRelativeTo(null);
+                frame.setResizable(false);
+                frame.setVisible(true);
+                
+                // Request focus for keyboard input
+                game.requestFocusInWindow();
+            }
         });
     }
 }
